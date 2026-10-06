@@ -1,0 +1,225 @@
+import type { Category, MovieItem, NewsItem, SocialItem } from '@/types/content';
+
+export const categories: Category[] = [
+  'Technology',
+  'Sports',
+  'Finance',
+  'Business',
+  'Entertainment',
+  'Science',
+  'Health',
+];
+
+export const defaultPreferences: Category[] = [
+  'Technology',
+  'Business',
+  'Health',
+  'Entertainment',
+];
+
+export const mockNews: NewsItem[] = [
+  {
+    id: 'news-technology-1',
+    type: 'news',
+    category: 'Technology',
+    source: 'TechPulse',
+    title: 'AI copilots reshape enterprise productivity in 2026',
+    description: 'Teams are automating repetitive tasks while preserving critical human oversight in new AI deployment models.',
+    image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=900&q=80',
+    publishedAt: '2026-10-06T08:30:00Z',
+    url: '#',
+  },
+  {
+    id: 'news-sports-1',
+    type: 'news',
+    category: 'Sports',
+    source: 'Global Sport Weekly',
+    title: 'Teams prioritize recovery analytics to reduce injury risk',
+    description: 'Performance leaders are adopting wearable data and predictive models to keep high-value athletes on the field.',
+    image: 'https://images.unsplash.com/photo-1547347298-4074fc3086f0?auto=format&fit=crop&w=900&q=80',
+    publishedAt: '2026-10-05T11:15:00Z',
+    url: '#',
+  },
+  {
+    id: 'news-finance-1',
+    type: 'news',
+    category: 'Finance',
+    source: 'Capital Brief',
+    title: 'Retail investing rises as digital wallets gain mass adoption',
+    description: 'Interest in diversified index strategies and micro-investing remains elevated among Gen Z and millennial users.',
+    image: 'https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=900&q=80',
+    publishedAt: '2026-10-04T09:10:00Z',
+    url: '#',
+  },
+  {
+    id: 'news-business-1',
+    type: 'news',
+    category: 'Business',
+    source: 'Market Desk',
+    title: 'Small businesses accelerate omnichannel expansions in urban hubs',
+    description: 'Retailers are blending digital storefronts with physical experiences to address convenience and trust.',
+    image: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=900&q=80',
+    publishedAt: '2026-10-03T13:40:00Z',
+    url: '#',
+  },
+  {
+    id: 'news-entertainment-1',
+    type: 'news',
+    category: 'Entertainment',
+    source: 'SceneCast',
+    title: 'Streaming platforms double down on interactive storytelling',
+    description: 'Viewers are responding to creator-first formats that blend live events, community voting, and short-form viewing.',
+    image: 'https://images.unsplash.com/photo-1524985069026-dd778a71c7b4?auto=format&fit=crop&w=900&q=80',
+    publishedAt: '2026-10-02T18:00:00Z',
+    url: '#',
+  },
+  {
+    id: 'news-science-1',
+    type: 'news',
+    category: 'Science',
+    source: 'Future Labs',
+    title: 'Battery chemistry breakthroughs improve charging speed and safety',
+    description: 'Researchers are emerging with lower-cost materials that extend cycle life and lower thermal stress.',
+    image: 'https://images.unsplash.com/photo-1532187643603-ba119ca4109e?auto=format&fit=crop&w=900&q=80',
+    publishedAt: '2026-10-01T10:05:00Z',
+    url: '#',
+  },
+  {
+    id: 'news-health-1',
+    type: 'news',
+    category: 'Health',
+    source: 'Wellness Wire',
+    title: 'Preventive care programs show measurable gains for chronic conditions',
+    description: 'Data-driven interventions continue to improve care access while reducing long-term hospital stays.',
+    image: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=900&q=80',
+    publishedAt: '2026-09-29T12:20:00Z',
+    url: '#',
+  },
+  {
+    id: 'news-technology-2',
+    type: 'news',
+    category: 'Technology',
+    source: 'NextByte',
+    title: 'Open standards drive a new generation of interoperable devices',
+    description: 'Manufacturers are moving toward connected ecosystems built on faster data sharing and simpler setup.',
+    image: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=900&q=80',
+    publishedAt: '2026-09-28T15:10:00Z',
+    url: '#',
+  },
+];
+
+export const mockMovies: MovieItem[] = [
+  {
+    id: 'movie-1',
+    type: 'movie',
+    title: 'Neon Horizon',
+    overview: 'A gifted pilot discovers a hidden civilization in the upper atmosphere and risks everything to preserve it.',
+    poster: 'https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=700&q=80',
+    rating: 8.6,
+    releaseDate: '2026-09-12',
+    genre: 'Sci-Fi',
+    page: 1,
+  },
+  {
+    id: 'movie-2',
+    type: 'movie',
+    title: 'Velvet Run',
+    overview: 'A former athlete returns to compete in a high-stakes urban marathon with a team that defies the odds.',
+    poster: 'https://images.unsplash.com/photo-1513106580091-1d82408b8cd6?auto=format&fit=crop&w=700&q=80',
+    rating: 8.2,
+    releaseDate: '2026-11-04',
+    genre: 'Drama',
+    page: 1,
+  },
+  {
+    id: 'movie-3',
+    type: 'movie',
+    title: 'Crimson Harbor',
+    overview: 'A family-run shipping business confronts rising tensions when a new investor arrives with hidden motives.',
+    poster: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=700&q=80',
+    rating: 7.9,
+    releaseDate: '2026-08-21',
+    genre: 'Thriller',
+    page: 1,
+  },
+  {
+    id: 'movie-4',
+    type: 'movie',
+    title: 'Moonlit District',
+    overview: 'Two neighbors uncover a covert network of artists whose work is transforming the city night economy.',
+    poster: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=700&q=80',
+    rating: 8.8,
+    releaseDate: '2026-06-19',
+    genre: 'Drama',
+    page: 1,
+  },
+  {
+    id: 'movie-5',
+    type: 'movie',
+    title: 'Signal Bloom',
+    overview: 'A data engineer learns how a small community network is changing the way people experience care and trust.',
+    poster: 'https://images.unsplash.com/photo-1542204165-65bf26472b9b?auto=format&fit=crop&w=700&q=80',
+    rating: 8.4,
+    releaseDate: '2026-12-14',
+    genre: 'Techno-Drama',
+    page: 1,
+  },
+];
+
+export const mockSocialPosts: SocialItem[] = [
+  {
+    id: 'social-1',
+    type: 'social',
+    user: 'Maya Rivers',
+    username: '@mayarivers',
+    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80',
+    text: 'My favorite thing this week: tools that help teams plan with less friction and more clarity. #Productivity #Teamwork',
+    hashtags: ['#Productivity', '#Teamwork'],
+    image: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=900&q=80',
+    likes: 1420,
+  },
+  {
+    id: 'social-2',
+    type: 'social',
+    user: 'Leo Grant',
+    username: '@leogrant',
+    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80',
+    text: 'Morning run, strong coffee, and a plan for the day. Nothing beats a consistent routine. #Sports #Wellness',
+    hashtags: ['#Sports', '#Wellness'],
+    likes: 830,
+  },
+  {
+    id: 'social-3',
+    type: 'social',
+    user: 'Priya Shah',
+    username: '@priyashah',
+    avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=80',
+    text: 'My latest reading list is all about business resilience and future-proof operations. #Business #Strategy',
+    hashtags: ['#Business', '#Strategy'],
+    likes: 1210,
+  },
+  {
+    id: 'social-4',
+    type: 'social',
+    user: 'Jules Owen',
+    username: '@julesowen',
+    avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=200&q=80',
+    text: 'Watching cinematic visuals and amazing sound design from this weekend’s indie screenings. #Entertainment',
+    hashtags: ['#Entertainment'],
+    image: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=900&q=80',
+    likes: 980,
+  },
+];
+
+export const trendingNews = [
+  ...mockNews.slice(0, 3),
+  ...mockNews.slice(4, 6),
+];
+
+export const trendingMovies = mockMovies.slice(0, 3);
+export const trendingSocial = mockSocialPosts.slice(0, 3);
+
+export const isContentCategoryMatch = (item: { category?: Category }, selected: Category[] = []) => {
+  if (!selected.length) return true;
+  return item.category ? selected.includes(item.category) : true;
+};
