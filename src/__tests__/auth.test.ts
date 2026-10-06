@@ -61,22 +61,18 @@ describe('authentication flow', () => {
   };
 
   it('requires a strong JWT secret in production', async () => {
-    const originalNodeEnv = process.env.NODE_ENV;
-    const originalJwtSecret = process.env.JWT_SECRET;
-    process.env.NODE_ENV = 'production';
-    delete process.env.JWT_SECRET;
+    const restoreEnv = jest.replaceProperty(process, 'env', {
+      ...process.env,
+      NODE_ENV: 'production',
+      JWT_SECRET: '',
+    });
 
     try {
       await expect(
         signSessionToken({ id: 'user-id', name: 'User', email: 'user@example.com' }),
       ).rejects.toThrow('JWT_SECRET must be set to at least 32 characters in production.');
     } finally {
-      process.env.NODE_ENV = originalNodeEnv;
-      if (originalJwtSecret === undefined) {
-        delete process.env.JWT_SECRET;
-      } else {
-        process.env.JWT_SECRET = originalJwtSecret;
-      }
+      restoreEnv.restore();
     }
   });
 
