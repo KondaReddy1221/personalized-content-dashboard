@@ -29,7 +29,7 @@ This application provides a polished dashboard experience with secure authentica
 - Framer Motion
 - @dnd-kit/core
 - Prisma ORM
-- SQLite for local development (PostgreSQL-ready schema)
+- SQLite for local development and Neon PostgreSQL in production
 - bcryptjs + jose for password hashing and sessions
 - Jest + Testing Library
 - Playwright
@@ -47,7 +47,9 @@ This application provides a polished dashboard experience with secure authentica
 ```text
 personalized-content-dashboard/
 ├── prisma/
-│   └── schema.prisma
+│   ├── migrations/
+│   ├── schema.prisma
+│   └── schema.sqlite.prisma
 ├── src/
 │   ├── app/
 │   │   ├── api/
@@ -83,16 +85,19 @@ personalized-content-dashboard/
 
 ## Prerequisites
 
-- Node.js 18+
+- Node.js 20.9+
 - npm
-- SQLite is used by default for local development
+- SQLite is used for local development; Vercel deployments use Neon PostgreSQL
 
 ## Installation
 
 ```bash
 npm install
-cp .env.example .env
+Copy-Item .env.example .env
+npm run db:push:sqlite
 ```
+
+In shells without `Copy-Item`, use the equivalent command to copy `.env.example` to `.env`.
 
 ## Environment Variables
 
@@ -103,13 +108,14 @@ NEXT_PUBLIC_NEWS_API_KEY=""
 NEXT_PUBLIC_TMDB_API_KEY=""
 ```
 
-For production PostgreSQL, update the Prisma datasource provider and use a PostgreSQL connection string instead.
+The default Prisma schema targets PostgreSQL for production. The install step generates a local SQLite Prisma
+Client from `prisma/schema.sqlite.prisma`, which is used by local development and tests.
 
 ## Database Setup
 
 ```bash
-npx prisma generate
-npx prisma db push
+npm run db:generate:sqlite
+npm run db:push:sqlite
 ```
 
 This creates the SQLite database for local development and initializes the authentication schema.
@@ -151,6 +157,40 @@ npm run test:e2e
 ```bash
 npm run build
 ```
+
+## Deploy to Vercel with Neon
+
+1. Create a Neon project and copy both connection strings from its dashboard:
+   - `DATABASE_URL`: the pooled connection string for application queries.
+   - `DIRECT_URL`: the direct (unpooled) connection string for Prisma migrations.
+   Keep both values private and enable SSL (`sslmode=require`).
+2. In Vercel, create/import the project with **Root Directory** set to `personalized-content-dashboard`.
+   The included `vercel.json` selects Next.js and runs `npm run vercel-build`, which generates Prisma Client,
+   applies checked-in migrations, and builds the app.
+3. Add these environment variables in Vercel for Production and Preview. Use a separate Neon database/branch
+   for Preview:
+
+   | Variable | Value |
+   | --- | --- |
+   | `DATABASE_URL` | Neon pooled PostgreSQL URL |
+   | `DIRECT_URL` | Neon direct PostgreSQL URL |
+   | `JWT_SECRET` | A private random value of at least 32 characters |
+
+   `NEXT_PUBLIC_NEWS_API_KEY` and `NEXT_PUBLIC_TMDB_API_KEY` are optional; the app uses fallback content when absent.
+   Generate `JWT_SECRET` locally (for example, with `node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"`)
+   and enter it directly in Vercel's environment-variable settings.
+4. Deploy from this project directory:
+
+   ```bash
+   npx vercel
+   npx vercel --prod
+   ```
+
+   Complete the prompts to link the Vercel project. The first deployment may initialize the Neon schema using
+   the committed Prisma migration. Do not paste database URLs or `JWT_SECRET` into source files or chat.
+
+The deployed database starts empty; local SQLite records are not automatically copied to Neon. Authentication,
+password hashing, session cookies, and the existing Prisma models remain in place.
 
 ## Live Demo
 

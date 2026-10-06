@@ -3,12 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "postinstall": "prisma generate --schema prisma/schema.sqlite.prisma",
     "dev": "next dev",
     "build": "next build",
+    "vercel-build": "prisma generate && prisma migrate deploy && next build",
     "start": "next start",
     "lint": "eslint .",
     "test": "jest --runInBand",
     "test:watch": "jest --watch",
+    "db:generate:sqlite": "prisma generate --schema prisma/schema.sqlite.prisma",
+    "db:push:sqlite": "prisma db push --schema prisma/schema.sqlite.prisma",
     "test:e2e": "playwright test"
   },
   "dependencies": {

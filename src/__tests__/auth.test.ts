@@ -49,6 +49,7 @@ jest.mock('next/server', () => ({
 
 import { POST as registerUser } from '@/app/api/auth/register/route';
 import { POST as loginUser } from '@/app/api/auth/login/route';
+import { signSessionToken } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 
 describe('authentication flow', () => {
@@ -58,6 +59,26 @@ describe('authentication flow', () => {
     testEmails.add(email);
     return email;
   };
+
+  it('requires a strong JWT secret in production', async () => {
+    const originalNodeEnv = process.env.NODE_ENV;
+    const originalJwtSecret = process.env.JWT_SECRET;
+    process.env.NODE_ENV = 'production';
+    delete process.env.JWT_SECRET;
+
+    try {
+      await expect(
+        signSessionToken({ id: 'user-id', name: 'User', email: 'user@example.com' }),
+      ).rejects.toThrow('JWT_SECRET must be set to at least 32 characters in production.');
+    } finally {
+      process.env.NODE_ENV = originalNodeEnv;
+      if (originalJwtSecret === undefined) {
+        delete process.env.JWT_SECRET;
+      } else {
+        process.env.JWT_SECRET = originalJwtSecret;
+      }
+    }
+  });
 
   afterAll(async () => {
     await prisma.user.deleteMany({ where: { email: { in: [...testEmails] } } });

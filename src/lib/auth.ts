@@ -4,9 +4,17 @@ import { prisma } from '@/lib/prisma';
 
 export const SESSION_COOKIE = 'personalized_dashboard_session';
 
-const secret = new TextEncoder().encode(
-  process.env.JWT_SECRET || 'local-development-secret-change-me-in-production',
-);
+function getSecret() {
+  const configuredSecret = process.env.JWT_SECRET;
+
+  if (process.env.NODE_ENV === 'production' && (!configuredSecret || configuredSecret.length < 32)) {
+    throw new Error('JWT_SECRET must be set to at least 32 characters in production.');
+  }
+
+  return new TextEncoder().encode(
+    configuredSecret || 'local-development-secret-change-me-in-production',
+  );
+}
 
 export type SessionUser = {
   id: string;
@@ -19,11 +27,11 @@ export async function signSessionToken(user: SessionUser) {
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
     .setExpirationTime('7d')
-    .sign(secret);
+    .sign(getSecret());
 }
 
 export async function verifySessionToken(token: string) {
-  const { payload } = await jwtVerify(token, secret);
+  const { payload } = await jwtVerify(token, getSecret());
   return payload as {
     userId: string;
     email: string;
