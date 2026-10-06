@@ -87,50 +87,56 @@ personalized-content-dashboard/
 
 - Node.js 20.9+
 - npm
-- SQLite is used for local development; Vercel deployments use Neon PostgreSQL
+- SQLite is the default for local development and tests
+- Neon PostgreSQL is used for Vercel production and optional Neon-backed development
 
 ## Installation
 
 ```bash
 npm install
-Copy-Item .env.example .env
-npm run db:push:sqlite
+if not exist .env copy .env.example .env
 ```
 
-In shells without `Copy-Item`, use the equivalent command to copy `.env.example` to `.env`.
+The local development command uses SQLite regardless of the `DATABASE_URL` in `.env`; no Neon credentials or
+`DIRECT_URL` are needed to start the app locally. Configure Neon variables only when using `npm run dev:neon`
+or deploying to Vercel. Do not commit `.env`.
 
 ## Environment Variables
 
-Local `.env` values (SQLite):
+Neon PostgreSQL environment variables (for development and production):
 
 ```env
-DATABASE_URL="file:./dev.db"
+DATABASE_URL="postgresql://USER:PASSWORD@HOST/DATABASE?sslmode=require&pgbouncer=true"
 DIRECT_URL="postgresql://USER:PASSWORD@HOST/DATABASE?sslmode=require"
 JWT_SECRET="replace-with-a-random-secret-at-least-32-characters-long"
 NEXT_PUBLIC_NEWS_API_KEY=""
 NEXT_PUBLIC_TMDB_API_KEY=""
 ```
 
-The default Prisma schema targets PostgreSQL for production. The install step generates a local SQLite Prisma
-Client from `prisma/schema.sqlite.prisma`, which is used by local development and tests. The local `DIRECT_URL`
-value is only a placeholder; the SQLite schema does not use it.
+`DATABASE_URL` is the Neon pooled application connection. `DIRECT_URL` is the direct/unpooled connection used by
+Prisma for schema generation and migrations. Both are required by `prisma/schema.prisma`. API keys are optional.
 
-## Database Setup
+Before using a new Neon database locally, apply its checked-in migrations once:
 
 ```bash
-npm run db:generate:sqlite
-npm run db:push:sqlite
+npm run db:migrate:deploy
 ```
 
-This creates the SQLite database for local development and initializes the authentication schema.
-
-## Running the Application
+## Development
 
 ```bash
 npm run dev
 ```
 
+This starts Next.js with SQLite and syncs the local `prisma/dev.db`. It does not require Neon settings or change
+`.env`. SQLite tests also use the local database. To use Neon locally instead, set `DATABASE_URL` to the pooled
+connection string, `DIRECT_URL` to the direct/unpooled connection string, and `JWT_SECRET` to a private random
+value of at least 32 characters, then run `npm run dev:neon`.
+
 Open http://localhost:3000.
+
+`npm run dev:sqlite` is an alias for the default SQLite development command. To initialize or update the SQLite
+database without starting Next.js, run `npm run db:push:sqlite`.
 
 ## User Flow
 
@@ -200,7 +206,7 @@ npm run build
    committed migrations using `DIRECT_URL`, then builds Next.js. Do not put database URLs or `JWT_SECRET` in
    source files or command-line arguments.
 
-The deployed database starts empty; local SQLite records are not automatically copied to Neon. Authentication,
+The Neon database starts empty; local SQLite records are not automatically copied to Neon. Authentication,
 password hashing, session cookies, and the existing Prisma models remain in place.
 
 ## Live Demo
@@ -209,7 +215,7 @@ A production demo URL can be added after deployment to Vercel or another hosting
 
 ## Known Limitations
 
-- SQLite is used for local development convenience; production should prefer PostgreSQL.
+- SQLite remains available for isolated local development and tests; PostgreSQL is the default application database.
 - Live API keys are optional and the app falls back to realistic mock data if they are missing.
 
 ## Future Improvements
